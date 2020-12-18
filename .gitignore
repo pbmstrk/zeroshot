@@ -1,0 +1,7 @@
+env/
+test_file.py
+*.ipynb
+*.DS_Store
+*.data/
+
+*__pycache__/
