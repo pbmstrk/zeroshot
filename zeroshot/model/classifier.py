@@ -45,7 +45,7 @@ class BiEncoderClassifier(pl.LightningModule):
         super().__init__()
         self.encoder = text_encoder
         self.scorer = Scorer()
-        self.label_encodings = label_encodings
+        self.register_buffer("label_encodings", label_encodings)
         self.opt = optimizer
         if scheduler is not None:
             self.schedule = scheduler

@@ -26,7 +26,8 @@ class ExampleEncoder:
 
         texts, targets = self.unzip_batch(batch)
 
-        return self(text=texts, target=targets, return_tensors='pt', padding='longest')
+        return self(text=texts, target=targets, return_tensors='pt', padding='longest',
+                truncation=True)
 
     def unzip_batch(self, batch):
         return list(map(list, zip(*batch)))

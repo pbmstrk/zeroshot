@@ -40,7 +40,7 @@ def main(cfg: DictConfig):
     description_encodings = tokenizer(descriptions, padding="longest", return_tensors="pt")
     label_encodings = label_encoder(**description_encodings)[1]
 
-    optimizer = torch.optim.Adam(text_encoder.params(), **cfg.optimizer.args)
+    optimizer = torch.optim.Adam(text_encoder.parameters(), **cfg.optimizer.args)
 
     model = BiEncoderClassifier(
         text_encoder=text_encoder,
