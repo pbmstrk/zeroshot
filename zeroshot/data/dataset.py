@@ -21,6 +21,7 @@ def ZeroShotTopicClassificationDataset(return_subset='v0'):
         for i, line in enumerate(data):
             category_dict[line.strip()] = i
 
+    label_map = {str(value): key for key, value in category_dict.items()}
     if return_subset == 'v0':
         train_file = Path("topic/train_pu_half_v0.txt")
     elif return_subset == 'v1':
@@ -28,9 +29,9 @@ def ZeroShotTopicClassificationDataset(return_subset='v0'):
     dev_file = Path("topic/dev.txt")
     test_file = Path("topic/test.txt")
 
-    train_data = parse_from_txt_file(root / name / foldername / train_file)
-    dev_data = parse_from_txt_file(root / name / foldername / dev_file)
-    test_data = parse_from_txt_file(root / name / foldername / test_file)
+    train_data = parse_from_txt_file(root / name / foldername / train_file, label_map)
+    dev_data = parse_from_txt_file(root / name / foldername / dev_file, label_map)
+    test_data = parse_from_txt_file(root / name / foldername / test_file, label_map)
 
     return (
         TextDataset(train_data),
