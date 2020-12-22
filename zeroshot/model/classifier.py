@@ -69,7 +69,7 @@ class BiEncoderClassifier(pl.LightningModule):
         acc = correct.float() / len(targets)
 
         self.log(prefix + "loss", loss)
-        self.log(prefix + "acc", acc)
+        self.log(prefix + "acc", acc, on_epoch=True, on_step=False)
 
         return loss
 
