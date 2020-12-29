@@ -3,6 +3,7 @@ import shutil
 
 import requests
 from tqdm import tqdm
+import pathlib
 from pathlib import Path
 
 
@@ -17,21 +18,23 @@ def _process_resp(resp, filepath):
                     pbar.update(len(data))
 
 
-def download_file(url, name, root=Path(".data"), filename=None, override=False):
+def download_file(url, name, root=".data", filename=None, override=False):
 
     # File will be stored in root/name/filename
     # root and name are passed as parameters
     # filename is inferred from url
 
-    name = Path(name)
+    if not isinstance(name, pathlib.PosixPath):
+        name = Path(name)
+    if not isinstance(root, pathlib.PosixPath):
+        root = Path(root)
     # create directory if it doesn't exist
     if not os.path.exists(root / name):
         os.makedirs(root / name)
 
     if not filename:
-        _, filename = Path(os.path.split(url))
-    else:
-        filename = Path(filename)
+        _, filename = os.path.split(url)
+    filename = Path(filename)
 
     filepath = root / name / filename
 
