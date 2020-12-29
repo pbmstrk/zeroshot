@@ -81,3 +81,4 @@ def download_extract(url, name, root=".data", override=False, filename=None,
         if zfile:
             extract_from_file(zfile, extract_dir)
 
+        return zfile
