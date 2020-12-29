@@ -39,8 +39,7 @@ class Scorer(nn.Module):
 
 class ZeroShotClassifier(nn.Module):
 
-    def __init__(self, text_encoder, projection_matrix, label_encodings, optimizer,
-            scheduler = None):
+    def __init__(self, text_encoder, projection_matrix, label_encodings):
         super().__init__()
         self.encoder = text_encoder
         self.scorer = Scorer()
