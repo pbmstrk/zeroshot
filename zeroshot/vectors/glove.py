@@ -19,8 +19,7 @@ def extract_vectors(filepath):
                 continue
     return embedding_map
 
-def GloVe(name, root = ".data"):
-
+def GloVe(name, dim, root = ".data"):
 
     URLs = {
         "42B": "https://nlp.stanford.edu/data/glove.42B.300d.zip",
@@ -29,7 +28,9 @@ def GloVe(name, root = ".data"):
         "6B": "https://nlp.stanford.edu/data/glove.6B.zip",
     }
 
-    filepath = download_extract(URLs[name], name=name, root=root)
+    download_extract(URLs[name], name=name, root=root)
+    filename = f"glove.{name}.{dim}d.txt"
+    filepath = os.path.join(root, name, filename)
     vector_map = extract_vectors(filepath)
 
     return vector_map

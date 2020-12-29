@@ -1,4 +1,3 @@
-import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 from transformers import BertModel
@@ -38,57 +37,18 @@ class Scorer(nn.Module):
         return torch.einsum('ij, kj->ik', text_encodings, label_encodings)
 
 
-class BiEncoderClassifier(pl.LightningModule):
+class ZeroShotClassifier(nn.Module):
 
-    def __init__(self, text_encoder, label_encodings, optimizer,
+    def __init__(self, text_encoder, projection_matrix, label_encodings, optimizer,
             scheduler = None):
         super().__init__()
         self.encoder = text_encoder
         self.scorer = Scorer()
         self.register_buffer("label_encodings", label_encodings)
-        self.opt = optimizer
-        if scheduler is not None:
-            self.schedule = scheduler
+        self.projection_matrix = projection_matrix
 
     def forward(self, input_ids, **kwargs):
         text_encodings = self.encoder(input_ids, **kwargs)[1]
-        return self.scorer(text_encodings, self.label_encodings)
-
-    def step(self, batch, batch_idx, prefix=""):
-
-        inputs, targets = batch
-
-        outputs = self(**inputs)
-
-        # compute loss
-        loss = F.cross_entropy(outputs, targets)
-
-        # compute acc
-        _, pred = torch.max(outputs.data, 1)
-        correct = (pred == targets).sum()
-        acc = correct.float() / len(targets)
-
-        self.log(prefix + "loss", loss)
-        self.log(prefix + "acc", acc, on_epoch=True, on_step=False)
-
-        return loss
-
-    def training_step(self, batch, batch_idx):
-
-        return self.step(batch, batch_idx)
-
-    def validation_step(self, batch, batch_idx):
-
-        return self.step(batch, batch_idx, prefix="val_")
-
-    def test_step(self, batch, batch_idx):
-
-        return self.step(batch, batch_idx, prefix="test_")
-
-    def configure_optimizers(self):
-
-        if hasattr(self, "schedule"):
-            return [self.opt], [self.schedule]
-
-        return self.opt
-
+        proj_text_enc = text_encodings @ self.projection_matrix
+        proj_label_enc = self.label_encodings @ self.projection_matrix
+        return self.scorer(proj_text_enc, proj_label_enc)
