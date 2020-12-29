@@ -44,7 +44,7 @@ class ZeroShotClassifier(nn.Module):
         self.encoder = text_encoder
         self.scorer = Scorer()
         self.register_buffer("label_encodings", label_encodings)
-        self.projection_matrix = projection_matrix
+        self.register_buffer("projection_matrix", projection_matrix)
 
     def forward(self, input_ids, **kwargs):
         text_encodings = self.encoder(input_ids, **kwargs)[1]
