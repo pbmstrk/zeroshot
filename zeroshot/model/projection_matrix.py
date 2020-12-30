@@ -24,7 +24,8 @@ def get_projection_matrix(model_name, vectors, k=1000):
     for i in tqdm(range(0, len(words), batch_size)):
         batch = words[i:i+batch_size]
         inputs = tokenizer(batch, return_tensors="pt", padding="longest")
-        outputs = model(**inputs)[1]
+        outputs = model(**inputs)[0]
+        outputs = outputs.mean(1)
         encoder_matrix = torch.cat((encoder_matrix, outputs))
 
     print("Obtaining least squares estimate")

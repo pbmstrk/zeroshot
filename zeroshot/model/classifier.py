@@ -27,7 +27,7 @@ class LabelEncoder(nn.Module):
             with torch.no_grad():
                 outputs = self.model(input_ids, **kwargs)
                 return outputs.mean(1)
-        outputs = self.model(input_ids, **kwargs)
+        outputs = self.model(input_ids, **kwargs)[0]
         return outputs.mean(1)
 
 
@@ -38,7 +38,7 @@ class Scorer(nn.Module):
         self.score = nn.CosineSimilarity()
 
     def forward(self, text_encodings, label_encodings):
-        return torch.stack([self.score(tensor, label_encodings) for tensor in text_encodings]) 
+        return torch.stack([self.score(tensor.unsqueeze(0), label_encodings) for tensor in text_encodings]) 
 
 
 class ZeroShotClassifier(nn.Module):
