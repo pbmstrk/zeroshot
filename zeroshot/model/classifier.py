@@ -11,7 +11,8 @@ class TextEncoder(nn.Module):
         self.model = BertModel.from_pretrained(model_name)
 
     def forward(self, input_ids, **kwargs):
-        return self.model(input_ids, **kwargs)
+        outputs = self.model(input_ids, **kwargs)[0]
+        return outputs.mean(1)
 
 
 class LabelEncoder(nn.Module):
@@ -24,8 +25,10 @@ class LabelEncoder(nn.Module):
     def forward(self, input_ids, **kwargs):
         if self.no_grad:
             with torch.no_grad():
-                return self.model(input_ids, **kwargs)
-        return self.model(input_ids, **kwargs)
+                outputs = self.model(input_ids, **kwargs)
+                return outputs.mean(1)
+        outputs = self.model(input_ids, **kwargs)
+        return outputs.mean(1)
 
 
 class Scorer(nn.Module):
