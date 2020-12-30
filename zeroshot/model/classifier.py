@@ -32,9 +32,10 @@ class Scorer(nn.Module):
 
     def __init__(self):
         super().__init__()
+        self.score = nn.CosineSimilarity()
 
     def forward(self, text_encodings, label_encodings):
-        return torch.einsum('ij, kj->ik', text_encodings, label_encodings)
+        return torch.stack([self.score(tensor, label_encodings) for tensor in text_encodings]) 
 
 
 class ZeroShotClassifier(nn.Module):
