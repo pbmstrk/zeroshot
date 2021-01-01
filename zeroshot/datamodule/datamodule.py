@@ -25,7 +25,7 @@ class DataModule:
 
     def val_dataloader(self):
 
-        if self.val:
+        if not self.val:
             raise ValueError
 
         return DataLoader(
@@ -34,7 +34,7 @@ class DataModule:
 
     def test_dataloader(self):
 
-        if self.test:
+        if not self.test:
             raise ValueError
 
         return DataLoader(

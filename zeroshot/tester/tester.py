@@ -1,4 +1,6 @@
 import torch
+from tqdm import tqdm
+
 from ..utils import move_args_to_device
 
 
@@ -20,8 +22,9 @@ class Tester:
         
         self.model = model
         self.metrics = {}
+        self.model.to(self.device)
 
-        for batch in dataloader:
+        for batch in tqdm(dataloader):
             self.test_batch(batch)
 
         return self.metrics
