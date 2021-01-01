@@ -1,1 +1,1 @@
-from .glove import GloVe
+from .vec import GloVe, Word2Vec

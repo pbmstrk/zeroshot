@@ -3,6 +3,9 @@ from collections import OrderedDict
 
 import numpy as np
 from tqdm import tqdm
+
+import gensim.downloader
+
 from ..utils import download_extract
 
 def extract_vectors(filepath):
@@ -33,4 +36,26 @@ def GloVe(name, dim, root = ".data"):
     filepath = os.path.join(root, name, filename)
     vector_map = extract_vectors(filepath)
 
-    return vector_map
+    return Vectors(vector_map)
+
+def Word2Vec():
+    return gensim.downloader.load('word2vec-google-news-300')
+
+
+class Vectors:
+
+    """
+    Mimic gensim API - creates a common interface
+    """
+
+    def __init__(self, vector_map):
+        self.vector_map = vector_map
+
+    @property
+    def index2entity(self):
+        return list(self.vector_map.keys())
+
+    def __getitem__(self, idx):
+        return self.vector_map[idx]
+
+    
