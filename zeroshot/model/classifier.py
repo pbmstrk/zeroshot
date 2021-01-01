@@ -34,7 +34,7 @@ class ZeroShotClassifier(nn.Module):
         self.scorer = Scorer()
         self.proj_mat = None
         self._use_projection_matrix = False
-        self.label_encodings = torch.Tensor()
+        self.register_buffer("label_encodings", torch.Tensor())
 
     def forward(self, input_ids, **kwargs):
         text_encodings = self.encoder(input_ids, **kwargs)
