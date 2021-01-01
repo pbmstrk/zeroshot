@@ -21,12 +21,13 @@ def get_projection_matrix(model_name, vectors, k=1000):
 
     batch_size = 32
     encoder_matrix = torch.Tensor()
-    for i in tqdm(range(0, len(words), batch_size)):
-        batch = words[i:i+batch_size]
-        inputs = tokenizer(batch, return_tensors="pt", padding="longest")
-        outputs = model(**inputs)[0]
-        outputs = outputs.mean(1)
-        encoder_matrix = torch.cat((encoder_matrix, outputs))
+    with torch.no_grad():
+        for i in tqdm(range(0, len(words), batch_size)):
+            batch = words[i:i+batch_size]
+            inputs = tokenizer(batch, return_tensors="pt", padding="longest")
+            outputs = model(**inputs)[0]
+            outputs = outputs.mean(1)
+            encoder_matrix = torch.cat((encoder_matrix, outputs))
 
     print("Obtaining least squares estimate")
     return torch.lstsq(wordvec_matrix, encoder_matrix).solution
