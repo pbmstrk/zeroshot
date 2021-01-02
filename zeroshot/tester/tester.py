@@ -24,6 +24,7 @@ class Tester:
         self.metrics = {}
         self.model.to(self.device)
 
+        self.model.eval()
         for batch in tqdm(dataloader):
             self.test_batch(batch)
 
