@@ -34,9 +34,9 @@ class ZeroShotClassifier(nn.Module):
         super().__init__()
         self.encoder = TextEncoder(model_name)
         self.scorer = Scorer()
-        self.proj_mat = None
         self._use_projection_matrix = False
         self.register_buffer("label_encodings", torch.Tensor())
+        self.register_buffer("proj_mat", torch.Tensor())
 
     def forward(self, input_ids, **kwargs):
         text_encodings = self.encoder(input_ids, **kwargs)
@@ -63,7 +63,7 @@ class ZeroShotClassifier(nn.Module):
     def use_projection_matrix(self, value):
         if not isinstance(value, bool):
             raise ValueError("Value must be a boolean")
-        if not self.proj_mat and value:
+        if not self.proj_mat.nelement() and value:
             raise MisconfigurationError("Trying to use projection matrix, but none found. Please add matrix using add_projection_matrix()")
         self._use_projection_matrix = value
 
