@@ -13,7 +13,7 @@ class TextEncoder(nn.Module):
 
     def forward(self, input_ids, attention_mask, **kwargs):
         mask = attention_mask
-        outputs = self.model(input_ids, **kwargs)[0]
+        outputs = self.model(input_ids, attention_mask, **kwargs)[0]
         mean_pool = (outputs*mask.unsqueeze(-1)).sum(1) / (mask.unsqueeze(-1).sum(1))
         return mean_pool
 
