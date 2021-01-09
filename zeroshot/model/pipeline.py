@@ -40,3 +40,6 @@ class ZeroShotTopicPipeline:
     def to(self, device):
         self.classifier.to(device)
         self.device = device
+
+    def eval(self):
+        self.classifier.eval()
