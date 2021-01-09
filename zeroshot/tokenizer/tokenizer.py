@@ -9,6 +9,8 @@ class ZeroShotTopicTokenizer:
 
         if isinstance(text, str):
             text = [text]
+        if isinstance(text, tuple):
+            text = list(text)
 
         encoded_text = self.tokenizer(text, **kwargs)
         return encoded_text

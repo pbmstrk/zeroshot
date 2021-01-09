@@ -8,15 +8,11 @@ class Tester:
         self.metrics = None
         self.target_encoding = target_encoding
 
-    @staticmethod
-    def unzip_batch(batch):
-        return list(map(list, zip(*batch)))
-
     def test_batch(self, batch):
 
-        inputs, targets = self.unzip_batch(batch)
+        inputs, targets = batch
         targets = torch.tensor(list(map(self.target_encoding.get, targets)))
-        outputs = self.pipeline(**inputs)
+        outputs = self.pipeline(inputs)
         
         _, pred = torch.max(outputs.data, 1)
         batch_correct = (pred.detach().cpu() == targets).sum()
