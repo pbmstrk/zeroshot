@@ -35,7 +35,7 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
-    "sphinx_autodoc_typehints",
+    "sphinx.ext.autosectionlabel"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -60,3 +60,5 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 html_show_sourcelink = False
+
+autosectionlabel_prefix_document = True
