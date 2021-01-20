@@ -1,9 +1,22 @@
 import torch
-from .classifier import ZeroShotTopicClassifier
+
 from ..tokenizer import ZeroShotTopicTokenizer
 from ..utils import move_args_to_device
+from .classifier import ZeroShotTopicClassifier
 
-class ZeroShotTopicPipeline:
+
+class ZeroShotPipeline:
+
+    r"""
+    ZeroShot Classifier.
+
+    Args:
+        model_name: Name of model to use.
+
+    Example::
+
+        >>> pipeline = ZeroShotPipeline(model_name="deepset/sentence_bert")
+    """
 
     def __init__(self, model_name):
         self.classifier = ZeroShotTopicClassifier(model_name)
@@ -11,7 +24,7 @@ class ZeroShotTopicPipeline:
         self.device = torch.device("cpu")
 
     def __call__(self, inputs, tokenizer_options={}):
-        
+
         tokenizer_options = self._add_tokenizer_defaults(tokenizer_options)
         encoded_inputs = self.tokenizer(inputs, **tokenizer_options)
 

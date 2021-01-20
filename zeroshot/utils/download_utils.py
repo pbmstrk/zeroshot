@@ -1,10 +1,10 @@
 import os
+import pathlib
 import shutil
+from pathlib import Path
 
 import requests
 from tqdm import tqdm
-import pathlib
-from pathlib import Path
 
 
 def _process_resp(resp, filepath):
@@ -70,8 +70,9 @@ def extract_from_file(zfile, drc):
     shutil.unpack_archive(str(zfile), drc)
 
 
-def download_extract(url, name, root=".data", override=False, filename=None,
-        extract_only=False):
+def download_extract(
+    url, name, root=".data", override=False, filename=None, extract_only=False
+):
 
     extract_dir = os.path.join(root, name)
 

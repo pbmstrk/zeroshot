@@ -1,7 +1,6 @@
 import torch
-from transformers import AutoTokenizer
-from transformers import AutoModel
 from tqdm import tqdm
+from transformers import AutoModel, AutoTokenizer
 
 
 def get_projection_matrix(model_name, vectors, k=1000, lmbda=0):
@@ -13,15 +12,17 @@ def get_projection_matrix(model_name, vectors, k=1000, lmbda=0):
 
     return regularized_lstsq(encoder_matrix, wordvec_matrix, lmbda)
 
+
 def get_wordvec_matrix(words, vectors, k):
 
     dim = vectors[words[0]].shape[0]
 
-    wordvec_matrix = torch.zeros((k, dim)) 
+    wordvec_matrix = torch.zeros((k, dim))
     for i, word in tqdm(enumerate(words)):
-        wordvec_matrix[i] = torch.tensor(vectors[word]) 
-    
+        wordvec_matrix[i] = torch.tensor(vectors[word])
+
     return wordvec_matrix
+
 
 def get_encoder_matrix(words, model_name):
 
@@ -32,12 +33,13 @@ def get_encoder_matrix(words, model_name):
     encoder_matrix = torch.Tensor()
     with torch.no_grad():
         for i in tqdm(range(0, len(words), batch_size)):
-            batch = words[i:i+batch_size]
+            batch = words[i : i + batch_size]
             inputs = tokenizer(batch, return_tensors="pt", padding="longest")
             outputs = model(**inputs)[0].mean(1)
             encoder_matrix = torch.cat((encoder_matrix, outputs))
 
     return encoder_matrix
+
 
 def regularized_lstsq(A, B, lmbda):
     n_col = A.shape[1]

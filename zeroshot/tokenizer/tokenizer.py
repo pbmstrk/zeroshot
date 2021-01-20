@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer
 
-class ZeroShotTopicTokenizer:
 
+class ZeroShotTopicTokenizer:
     def __init__(self, tokenizer_name):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
 

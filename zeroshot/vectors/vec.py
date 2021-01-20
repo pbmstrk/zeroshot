@@ -1,12 +1,12 @@
 import os
 from collections import OrderedDict
 
+import gensim.downloader
 import numpy as np
 from tqdm import tqdm
 
-import gensim.downloader
-
 from ..utils import download_extract
+
 
 def extract_vectors(filepath):
 
@@ -22,7 +22,27 @@ def extract_vectors(filepath):
                 continue
     return embedding_map
 
-def GloVe(name, dim, root = ".data"):
+
+def GloVe(name, dim, root=".data"):
+
+    r"""
+    Load pre-trained GloVe word embeddings. Returns an instance of the Vectors
+    class.
+
+    Reference: `GloVe: Global Vectors for Word Representation <https://nlp.stanford.edu/projects/glove/>`_
+
+    Args:
+        name: Name of vectors to retrieve - one of 6B, 42B, 840B and twitter.27B
+        dim: Dimension of word vectors.
+        root: Name of the root directory in which to cache vectors.
+
+    Returns:
+        Instance of vectors class.
+
+    Example::
+
+        >>> glove_vectors = GloVe(name="6B", dim=300)
+    """
 
     URLs = {
         "42B": "https://nlp.stanford.edu/data/glove.42B.300d.zip",
@@ -38,8 +58,20 @@ def GloVe(name, dim, root = ".data"):
 
     return Vectors(vector_map)
 
+
 def Word2Vec():
-    return gensim.downloader.load('word2vec-google-news-300')
+
+    r"""
+    Load pre-trained Word2Vec embeddings using Gensim.
+
+    Reference: `Word2Vec <https://code.google.com/archive/p/word2vec/>`_
+
+    Example::
+
+        >>> word2vec = Word2Vec()
+    """
+
+    return gensim.downloader.load("word2vec-google-news-300")
 
 
 class Vectors:
@@ -57,5 +89,3 @@ class Vectors:
 
     def __getitem__(self, idx):
         return self.vector_map[idx]
-
-    

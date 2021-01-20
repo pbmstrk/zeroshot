@@ -2,7 +2,6 @@ from torch.utils.data import Dataset
 
 
 class TextDataset(Dataset):
-
     def __init__(self, dataset):
         self.dataset = dataset
 

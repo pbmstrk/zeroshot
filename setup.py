@@ -14,13 +14,6 @@ def load_requirements(path_dir=PATH_ROOT, file_name="requirements.txt"):
     return reqs
 
 
-def get_extras_require():
-
-    requirements = {
-        "scripts": ["hydra-core"]
-    }
-    return requirements
-
 
 setup(
     name=NAME,
@@ -28,5 +21,4 @@ setup(
     version=VERSION,
     packages=find_packages(),
     install_requires=load_requirements(),
-    extras_require=get_extras_require()
 )

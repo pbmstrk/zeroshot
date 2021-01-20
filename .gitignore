@@ -7,3 +7,6 @@ test_file.py
 *__pycache__/
 .vscode/
 *.egg-info/
+
+*build/
+
