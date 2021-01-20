@@ -25,6 +25,10 @@ class ZeroShotPipeline:
 
     def __call__(self, inputs, tokenizer_options={}):
 
+        """
+        call model
+        """
+
         tokenizer_options = self._add_tokenizer_defaults(tokenizer_options)
         encoded_inputs = self.tokenizer(inputs, **tokenizer_options)
 
@@ -35,11 +39,19 @@ class ZeroShotPipeline:
         return self.classifier(**kwargs)
 
     def add_labels(self, labels, tokenizer_options={}):
+        """
+        add labels
+        """
+
         tokenizer_options = self._add_tokenizer_defaults(tokenizer_options)
         encoded_labels = self.tokenizer(labels, **tokenizer_options)
         self.classifier.create_label_index(**encoded_labels)
 
     def add_projection_matrix(self, proj_mat):
+
+        """
+        add projection matrix
+        """
         self.classifier.projection_matrix = proj_mat
 
     @staticmethod

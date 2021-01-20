@@ -2,7 +2,7 @@ from torch.utils.data import DataLoader
 
 
 class DataModule:
-    def __init__(self, train=None, collate_fn=None, val=None, test=None, batch_size=16):
+    def __init__(self, train=None, val=None, test=None, collate_fn=None, batch_size=16):
 
         self.train = train
         self.val = val
