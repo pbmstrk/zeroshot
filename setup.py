@@ -3,8 +3,7 @@ AUTHOR = "Paul Baumstark"
 VERSION = "0.1.0"
 
 import os
-
-from setuptools import find_packages, setup
+from setuptools import setup, find_packages
 
 PATH_ROOT = os.path.dirname(__file__)
 

@@ -1,11 +1,11 @@
 import torch
+import torch.nn as nn
 
-from ..tokenizer import ZeroShotTopicTokenizer
 from ..utils import move_args_to_device
-from .classifier import ZeroShotTopicClassifier
+from ..model import ZeroShotTopicClassifier
 
 
-class ZeroShotPipeline:
+class ZeroShotPipeline(nn.Module):
 
     r"""
     ZeroShot Classifier.
@@ -14,13 +14,15 @@ class ZeroShotPipeline:
         model_name: Name of model to use.
 
     Example::
-
-        >>> pipeline = ZeroShotPipeline(model_name="deepset/sentence_bert")
+        
+        >>> tokenizer = AutoTokenizer.from_pretrained('bert-based-uncased')
+        >>> model = AutoModel.from_pretrained('deepset/sentence_transformers')
+        >>> pipeline = ZeroShotPipeline(tokenizer, model)
     """
 
-    def __init__(self, model_name):
-        self.classifier = ZeroShotTopicClassifier(model_name)
-        self.tokenizer = ZeroShotTopicTokenizer(model_name)
+    def __init__(self, tokenizer, model):
+        self.tokenizer = tokenizer
+        self.model = model
         self.device = torch.device("cpu")
 
     def __call__(self, inputs, tokenizer_options={}):
@@ -36,7 +38,7 @@ class ZeroShotPipeline:
 
     @move_args_to_device
     def forward(self, **kwargs):
-        return self.classifier(**kwargs)
+        return self.model(**kwargs)
 
     def add_labels(self, labels, tokenizer_options={}):
         """
@@ -45,14 +47,14 @@ class ZeroShotPipeline:
 
         tokenizer_options = self._add_tokenizer_defaults(tokenizer_options)
         encoded_labels = self.tokenizer(labels, **tokenizer_options)
-        self.classifier.create_label_index(**encoded_labels)
+        self.model.create_label_index(**encoded_labels)
 
     def add_projection_matrix(self, proj_mat):
 
         """
         add projection matrix
         """
-        self.classifier.projection_matrix = proj_mat
+        self.model.projection_matrix = proj_mat
 
     @staticmethod
     def _add_tokenizer_defaults(options):
@@ -63,8 +65,5 @@ class ZeroShotPipeline:
         return options
 
     def to(self, device):
-        self.classifier.to(device)
+        self.model.to(device)
         self.device = device
-
-    def eval(self):
-        self.classifier.eval()

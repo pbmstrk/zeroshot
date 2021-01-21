@@ -4,9 +4,9 @@ from transformers import BertModel
 
 
 class TextEncoder(nn.Module):
-    def __init__(self, model_name):
+    def __init__(self, model):
         super().__init__()
-        self.model = BertModel.from_pretrained(model_name)
+        self.model = model
 
     def forward(self, input_ids, attention_mask, **kwargs):
         mask = attention_mask
@@ -30,9 +30,9 @@ class Scorer(nn.Module):
 
 
 class ZeroShotTopicClassifier(nn.Module):
-    def __init__(self, model_name):
+    def __init__(self, model):
         super().__init__()
-        self.model = TextEncoder(model_name)
+        self.model = TextEncoder(model)
         self.scorer = Scorer()
         self._use_projection_matrix = False
         self.register_buffer("label_encodings", torch.Tensor())
