@@ -12,7 +12,7 @@ class Tester:
 
         inputs, targets = batch
         targets = torch.tensor(list(map(self.target_encoding.get, targets)))
-        outputs = self.pipeline(inputs)
+        outputs = self.pipeline(list(inputs))
 
         _, pred = torch.max(outputs.data, 1)
         batch_correct = (pred.detach().cpu() == targets).sum()
