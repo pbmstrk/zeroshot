@@ -24,6 +24,8 @@ Building a Pipeline
    pipeline = ZeroShotPipeline(tokenizer, model)
    pipeline.add_labels(labels)
 
+To improve performance, it is possible to include a projection matrix. For more info, see :ref:`here<projection:get_projection_matrix>`.
+
 .. code-block:: python
 
    pipeline.add_projection_matrix(projection_matrix)

@@ -5,12 +5,22 @@ from transformers import AutoModel, AutoTokenizer
 
 def get_projection_matrix(model_name, vectors, k=1000, lmbda=0):
 
+    r"""
+    Function for calculating a projection matrix from sentence representations to word vectors.
+
+    Args:
+        model_name: Model used to obtain sentence representations
+        vectors: Object containing the word vectors. 
+        k: Number of words to use when calculating least squares projection matrix.
+        lmbda: Regularisation parameter.
+    """
+
     words = vectors.index2entity[:k]
     wordvec_matrix = get_wordvec_matrix(words, vectors, k)
 
     encoder_matrix = get_encoder_matrix(words, model_name)
 
-    return regularized_lstsq(encoder_matrix, wordvec_matrix, lmbda)
+    return regularized_lstsq(encoder_matrix, wordvec_matrix, lmbda)[:encoder_matrix.shape[1]]
 
 
 def get_wordvec_matrix(words, vectors, k):
